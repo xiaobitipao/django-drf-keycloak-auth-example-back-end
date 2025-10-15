@@ -1,5 +1,19 @@
 # django-drf-keycloak-auth-example
 
+- [django-drf-keycloak-auth-example](#django-drf-keycloak-auth-example)
+  - [Init project](#init-project)
+  - [Initial configuration](#initial-configuration)
+    - [Update settings.py](#update-settingspy)
+    - [Update urls.py](#update-urlspy)
+    - [Start](#start)
+  - [Resolve CORS](#resolve-cors)
+  - [Keycload OAuth](#keycload-oauth)
+    - [Append django-drf-keycloak-auth to `sys.path`](#append-django-drf-keycloak-auth-to-syspath)
+    - [Install django-drf-keycloak-auth](#install-django-drf-keycloak-auth)
+    - [Update settings](#update-settings)
+    - [update urls](#update-urls)
+    - [Prepare environment about Keycloak](#prepare-environment-about-keycloak)
+
 ## Init project
 
 ```bash
@@ -20,7 +34,7 @@ uv add Django==5.2.6 djangorestframework==3.16.1 python-dotenv==1.1.1 python-key
 django-admin startproject django_drf_keycloak_auth_example .
 ```
 
-## Initial configuratio
+## Initial configuration
 
 ### Update settings.py
 
@@ -70,4 +84,61 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+```
+
+## Keycload OAuth
+
+### <del>Append django-drf-keycloak-auth to `sys.path`</del>
+
+```bash
+uv run python sitecustomize_install.py
+```
+
+### Install django-drf-keycloak-auth
+
+```bash
+uv add django-drf-keycloak-auth==0.0.1
+```
+
+### Update settings
+
+```py
+INSTALLED_APPS = [
+    ...
+    "django_drf_keycloak_auth",
+]
+
+
+# DRF authentication by Keycloak
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "django_drf_keycloak_auth.authentication.KeycloakAuthentication",
+    ],
+}
+
+
+TEMPLATES = [
+    {
+        ...
+        "DIRS": [BASE_DIR / "django_drf_keycloak_auth_example" / "templates"],
+    },
+]
+```
+
+### update urls
+
+```py
+from django.urls import include
+path("", include("django_drf_keycloak_auth.urls")),
+```
+
+### Prepare environment about Keycloak
+
+Create a `.env` file with the following content.
+
+```bash
+KEYCLOAK_SERVER_URL=http://localhost:8080/
+KEYCLOAK_REALM=example_realm
+KEYCLOAK_CLIENT_ID=
+KEYCLOAK_CLIENT_SECRET=
 ```

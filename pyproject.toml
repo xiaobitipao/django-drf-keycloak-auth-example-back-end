@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "django==5.2.7",
     "django-cors-headers==4.9.0",
+    "django-drf-keycloak-auth==0.0.1",
     "djangorestframework==3.16.1",
     "python-dotenv==1.1.1",
     "python-keycloak==5.8.1",

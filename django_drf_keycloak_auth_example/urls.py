@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
@@ -25,4 +25,5 @@ urlpatterns = [
     path("example/home/", views.example_home, name="home"),
     path("example/hello/", views.example_get_hello, name="hello_get"),
     path("example/echo/", views.example_post_echo, name="echo_post"),
+    path("", include("django_drf_keycloak_auth.urls")),
 ]
