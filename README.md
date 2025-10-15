@@ -48,3 +48,26 @@ uv run manage.py migrate
 
 uv run manage.py runserver 8005
 ```
+
+## Resolve CORS
+
+Install `django-cors-headers` by `uv add django-cors-headers==4.9.0`, and update settings.py.
+
+```py
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+INSTALLED_APPS = [
+    ...
+    "corsheaders",
+]
+
+MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware", # Add it at the very beginning, before CommonMiddleware.
+    ...
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+```
