@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from urllib.parse import urljoin
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "django_drf_keycloak_auth",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -132,7 +135,67 @@ CORS_ALLOWED_ORIGINS = [
 
 # DRF authentication by Keycloak
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "django_drf_keycloak_auth.authentication.KeycloakAuthentication",
     ],
+}
+
+KEYCLOAK_SERVER_URL = os.environ.get("KEYCLOAK_SERVER_URL")
+KEYCLOAK_REALM = os.environ.get("KEYCLOAK_REALM")
+KEYCLOAK_CLIENT_ID = os.environ.get("KEYCLOAK_CLIENT_ID")
+KEYCLOAK_CLIENT_SECRET = os.environ.get("KEYCLOAK_CLIENT_SECRET")
+
+# drf_spectacular
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django DRF Keycloak example API",
+    "DESCRIPTION": "API docs for Django DRF Keycloak",
+    "VERSION": "1.0.0",
+    # 可选：指定默认 servers
+    "SERVERS": [
+        {"url": "http://localhost:8005", "description": "Local dev server"},
+    ],
+    # 把请求模型与响应模型拆开，便于阅读与复用
+    "COMPONENT_SPLIT_REQUEST": True,
+    # 定义全局默认使用哪个方案
+    "SECURITY": [
+        {"BearerAuth": []},
+        # {"OpenID": ["openid", "profile", "email"]},
+        # {"OAuth2": ["openid", "profile", "email"]},
+    ],
+    # 定义有哪些认证方案
+    "SECURITY_SCHEMES": {
+        "BearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        },
+        "OpenID": {
+            "type": "openIdConnect",
+            "openIdConnectUrl": urljoin(
+                KEYCLOAK_SERVER_URL.rstrip("/"),
+                f"/realms/{KEYCLOAK_REALM}/.well-known/openid-configuration",
+            ),
+        },
+        "OAuth2": {
+            "type": "oauth2",
+            "flows": {
+                "authorizationCode": {
+                    "authorizationUrl": urljoin(
+                        KEYCLOAK_SERVER_URL.rstrip("/"),
+                        f"/realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth",
+                    ),
+                    "tokenUrl": urljoin(
+                        KEYCLOAK_SERVER_URL.rstrip("/"),
+                        f"/realms/{KEYCLOAK_REALM}/protocol/openid-connect/token",
+                    ),
+                    "scopes": {
+                        "openid": "OpenID connect scope",
+                        "profile": "Access user profile",
+                        "email": "Access user email",
+                    },
+                }
+            },
+        },
+    },
 }

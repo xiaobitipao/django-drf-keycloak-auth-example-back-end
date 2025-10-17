@@ -17,6 +17,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 from . import views
 
@@ -26,4 +31,29 @@ urlpatterns = [
     path("example/hello/", views.example_get_hello, name="hello_get"),
     path("example/echo/", views.example_post_echo, name="echo_post"),
     path("", include("django_drf_keycloak_auth.urls")),
+    path("oauth_test/public/", views.PublicView.as_view(), name="oauth_test_public"),
+    path(
+        "oauth_test/protected/",
+        views.AuthTestProtectedView.as_view(),
+        name="oauth_test_protected",
+    ),
+    path(
+        "oauth_test/employee_role/",
+        views.AuthTestEmployeeRoleView.as_view(),
+        name="oauth_test_employee_role",
+    ),
+    # OpenAPI schema(JSON/YAML)
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    # Swagger UI(interactive)
+    path(
+        "api/schema/swagger-ui/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    # ReDoc(漂亮的静态文档)
+    path(
+        "api/schema/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
+    ),
 ]
