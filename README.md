@@ -1,6 +1,6 @@
-# django-drf-keycloak-auth-example
+# django-drf-keycloak-auth-example-back-end
 
-- [django-drf-keycloak-auth-example](#django-drf-keycloak-auth-example)
+- [django-drf-keycloak-auth-example-back-end](#django-drf-keycloak-auth-example-back-end)
   - [Init project](#init-project)
   - [Initial configuration](#initial-configuration)
     - [Update settings.py](#update-settingspy)
@@ -23,10 +23,10 @@
 
 ```bash
 # Initialize the project by uv
-uv init django-drf-keycloak-auth-example -p 3.11
+uv init django-drf-keycloak-auth-example-back-end -p 3.11
 
 # Create a virtual environment
-cd django-drf-keycloak-auth-example
+cd django-drf-keycloak-auth-example-back-end
 uv venv -p 3.11
 
 # Activate the virtual environment

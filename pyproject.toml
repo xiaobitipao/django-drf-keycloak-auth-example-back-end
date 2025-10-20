@@ -1,5 +1,5 @@
 [project]
-name = "django-drf-keycloak-auth-example"
+name = "django-drf-keycloak-auth-example-back-end"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

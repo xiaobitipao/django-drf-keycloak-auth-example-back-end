@@ -332,7 +332,7 @@ wheels = [
 ]
 
 [[package]]
-name = "django-drf-keycloak-auth-example"
+name = "django-drf-keycloak-auth-example-back-end"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
