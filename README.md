@@ -1,25 +1,38 @@
 # django-drf-keycloak-auth-example-back-end
 
 - [django-drf-keycloak-auth-example-back-end](#django-drf-keycloak-auth-example-back-end)
-  - [Init project](#init-project)
-  - [Initial configuration](#initial-configuration)
-    - [Update settings.py](#update-settingspy)
-    - [Update urls.py](#update-urlspy)
-    - [Start](#start)
-  - [Resolve CORS](#resolve-cors)
-  - [Keycload OAuth](#keycload-oauth)
-    - [Append django-drf-keycloak-auth to `sys.path`](#append-django-drf-keycloak-auth-to-syspath)
-    - [Install django-drf-keycloak-auth](#install-django-drf-keycloak-auth)
-    - [Update settings](#update-settings)
-    - [update urls](#update-urls)
+  - [Start project](#start-project)
+  - [Create project from zero](#create-project-from-zero)
+    - [Init project](#init-project)
+    - [Initial configuration](#initial-configuration)
+      - [Update settings.py](#update-settingspy)
+      - [Update urls.py](#update-urlspy)
+      - [Start](#start)
+    - [Resolve CORS](#resolve-cors)
+    - [Keycload OAuth](#keycload-oauth)
+      - [Append django-drf-keycloak-auth to `sys.path`](#append-django-drf-keycloak-auth-to-syspath)
+      - [Install django-drf-keycloak-auth](#install-django-drf-keycloak-auth)
+      - [Update settings](#update-settings)
+      - [update urls](#update-urls)
     - [Prepare environment about Keycloak](#prepare-environment-about-keycloak)
-  - [API 文档](#api-文档)
-    - [Install drf-spectacular](#install-drf-spectacular)
-    - [Update settings](#update-settings-1)
-    - [在 urls.py 中加入 schema 与 UI 视图](#在-urlspy-中加入-schema-与-ui-视图)
-  - [Others](#others)
+    - [API 文档](#api-文档)
+      - [Install drf-spectacular](#install-drf-spectacular)
+      - [Update settings](#update-settings-1)
+      - [在 urls.py 中加入 schema 与 UI 视图](#在-urlspy-中加入-schema-与-ui-视图)
+    - [Others](#others)
 
-## Init project
+## Start project
+
+```bash
+uv run manage.py makemigrations
+uv run manage.py migrate
+
+uv run manage.py runserver 8005
+```
+
+## Create project from zero
+
+### Init project
 
 ```bash
 # Initialize the project by uv
@@ -39,9 +52,9 @@ uv add Django==5.2.6 djangorestframework==3.16.1 python-dotenv==1.1.1 python-key
 django-admin startproject django_drf_keycloak_auth_example .
 ```
 
-## Initial configuration
+### Initial configuration
 
-### Update settings.py
+#### Update settings.py
 
 ```py
 INSTALLED_APPS = [
@@ -50,7 +63,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-### Update urls.py
+#### Update urls.py
 
 ```py
 from . import views
@@ -59,7 +72,7 @@ path("example/hello/", views.example_get_hello, name="hello_get"),
 path("example/echo/", views.example_post_echo, name="echo_post"),
 ```
 
-### Start
+#### Start
 
 ```bash
 uv run manage.py makemigrations
@@ -68,7 +81,7 @@ uv run manage.py migrate
 uv run manage.py runserver 8005
 ```
 
-## Resolve CORS
+### Resolve CORS
 
 Install `django-cors-headers` by `uv add django-cors-headers==4.9.0`, and update settings.py.
 
@@ -91,21 +104,21 @@ CORS_ALLOWED_ORIGINS = [
 ]
 ```
 
-## Keycload OAuth
+### Keycload OAuth
 
-### <del>Append django-drf-keycloak-auth to `sys.path`</del>
+#### <del>Append django-drf-keycloak-auth to `sys.path`</del>
 
 ```bash
 uv run python sitecustomize_install.py
 ```
 
-### Install django-drf-keycloak-auth
+#### Install django-drf-keycloak-auth
 
 ```bash
 uv add django-drf-keycloak-auth==0.0.1
 ```
 
-### Update settings
+#### Update settings
 
 ```py
 INSTALLED_APPS = [
@@ -130,7 +143,7 @@ TEMPLATES = [
 ]
 ```
 
-### update urls
+#### update urls
 
 ```py
 from django.urls import include
@@ -148,7 +161,7 @@ KEYCLOAK_CLIENT_ID=
 KEYCLOAK_CLIENT_SECRET=
 ```
 
-## API 文档
+### API 文档
 
 在 DRF 中，也可以生成像 Swagger 那样的 API docs。
 
@@ -158,7 +171,7 @@ KEYCLOAK_CLIENT_SECRET=
 > 
 > 另外，[drf-yasg](https://github.com/axnsan12/drf-yasg) 只支持 `OpenAPI 2.0`，如果希望使用 `OpenAPI 3.0` 建议使用 [drf-spectacular](https://github.com/tfranzel/drf-spectacular)。
 
-### Install drf-spectacular
+#### Install drf-spectacular
 
 `drf-spectacular` 是一个现代且被广泛使用的 `DRF OpenAPI（OpenAPI 3）` 生成器。它会基于 `DRF Serializer / ViewSet / APIView` 自动生成 `OpenAPI 3 schema`，并提供 `Swagger / ReDoc` 的视图。推荐用于生产环境替代老旧的 `coreapi` 文档方案。
 
@@ -167,11 +180,10 @@ KEYCLOAK_CLIENT_SECRET=
 uv add drf-spectacular
 ```
 
-### Update settings
+#### Update settings
 
 ```py
 import os
-from urllib.parse import urljoin
 
 # add drf-spectacular to installed apps in settings.py
 INSTALLED_APPS = [
@@ -216,23 +228,14 @@ SPECTACULAR_SETTINGS = {
         },
         "OpenID": {
             "type": "openIdConnect",
-            "openIdConnectUrl": urljoin(
-                KEYCLOAK_SERVER_URL.rstrip("/"),
-                f"/realms/{KEYCLOAK_REALM}/.well-known/openid-configuration",
-            ),
+            "openIdConnectUrl": f"{KEYCLOAK_SERVER_URL}realms/{KEYCLOAK_REALM}/.well-known/openid-configuration",
         },
         "OAuth2": {
             "type": "oauth2",
             "flows": {
                 "authorizationCode": {
-                    "authorizationUrl": urljoin(
-                        KEYCLOAK_SERVER_URL.rstrip("/"),
-                        f"/realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth",
-                    ),
-                    "tokenUrl": urljoin(
-                        KEYCLOAK_SERVER_URL.rstrip("/"),
-                        f"/realms/{KEYCLOAK_REALM}/protocol/openid-connect/token",
-                    ),
+                    "authorizationUrl": f"{KEYCLOAK_SERVER_URL}realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth",
+                    "tokenUrl": f"{KEYCLOAK_SERVER_URL}realms/{KEYCLOAK_REALM}/protocol/openid-connect/token",
                     "scopes": {
                         "openid": "OpenID connect scope",
                         "profile": "Access user profile",
@@ -245,7 +248,7 @@ SPECTACULAR_SETTINGS = {
 }
 ```
 
-### 在 urls.py 中加入 schema 与 UI 视图
+#### 在 urls.py 中加入 schema 与 UI 视图
 
 > 最常见的做法是添加三个 endpoint: OpenAPI JSON、Swagger UI、ReDoc。
 >
@@ -283,7 +286,7 @@ urlpatterns = [
 ]
 ```
 
-## Others
+### Others
 
 ```bash
 # Use PyPI by default; only use TestPyPI when specifically required.

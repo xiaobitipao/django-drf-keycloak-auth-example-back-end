@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
-from urllib.parse import urljoin
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -172,23 +171,14 @@ SPECTACULAR_SETTINGS = {
         },
         "OpenID": {
             "type": "openIdConnect",
-            "openIdConnectUrl": urljoin(
-                KEYCLOAK_SERVER_URL.rstrip("/"),
-                f"/realms/{KEYCLOAK_REALM}/.well-known/openid-configuration",
-            ),
+            "openIdConnectUrl": f"{KEYCLOAK_SERVER_URL}realms/{KEYCLOAK_REALM}/.well-known/openid-configuration",
         },
         "OAuth2": {
             "type": "oauth2",
             "flows": {
                 "authorizationCode": {
-                    "authorizationUrl": urljoin(
-                        KEYCLOAK_SERVER_URL.rstrip("/"),
-                        f"/realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth",
-                    ),
-                    "tokenUrl": urljoin(
-                        KEYCLOAK_SERVER_URL.rstrip("/"),
-                        f"/realms/{KEYCLOAK_REALM}/protocol/openid-connect/token",
-                    ),
+                    "authorizationUrl": f"{KEYCLOAK_SERVER_URL}realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth",
+                    "tokenUrl": f"{KEYCLOAK_SERVER_URL}realms/{KEYCLOAK_REALM}/protocol/openid-connect/token",
                     "scopes": {
                         "openid": "OpenID connect scope",
                         "profile": "Access user profile",
