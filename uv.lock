@@ -316,7 +316,7 @@ wheels = [
 
 [[package]]
 name = "django-drf-keycloak-auth"
-version = "0.0.2"
+version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
@@ -326,9 +326,9 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "python-keycloak" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5f/02/c586ecf87ff338f9a24bc4c75e7b38305ee2d29bf12c375d46ad78e355c6/django_drf_keycloak_auth-0.0.2.tar.gz", hash = "sha256:e5252d3c42db33e2e1048a5f844efef4f4fd5271024f7bf3fa2747e489acc564", size = 11536, upload-time = "2025-10-17T11:25:43.401Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/e8/af85ebf304c4d10e914c2687cb46ed715241cdf873b45ff4e56369da1d33/django_drf_keycloak_auth-0.1.0.tar.gz", hash = "sha256:ed5cfa42edfbca7e3a8c7e4952a4dca2581542e21f65d51273e98d904597d37e", size = 12866, upload-time = "2025-10-20T03:16:12.853Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/d0/a4b7e466edc041e736fd7da094ba6e6fb63040fbe103f17e2879dc5f8cef/django_drf_keycloak_auth-0.0.2-py3-none-any.whl", hash = "sha256:675d160b988e35a74731f6a3239c062fb10f9f441588b01e61aaad92eff9e753", size = 12294, upload-time = "2025-10-17T11:25:42.086Z" },
+    { url = "https://files.pythonhosted.org/packages/43/a0/99ec50a416c6090143fbc6cd27269fd6d3c6db1212bbe4abb222f6cf87be/django_drf_keycloak_auth-0.1.0-py3-none-any.whl", hash = "sha256:4017c179c525d83bc1f28844b921433058cb40ceb065a220cc741a47f2d8174d", size = 13374, upload-time = "2025-10-20T03:16:11.88Z" },
 ]
 
 [[package]]
@@ -349,7 +349,7 @@ dependencies = [
 requires-dist = [
     { name = "django", specifier = "==5.2.7" },
     { name = "django-cors-headers", specifier = "==4.9.0" },
-    { name = "django-drf-keycloak-auth", specifier = "==0.0.2" },
+    { name = "django-drf-keycloak-auth", specifier = "==0.1.0" },
     { name = "djangorestframework", specifier = "==3.16.1" },
     { name = "drf-spectacular", specifier = "==0.28.0" },
     { name = "python-dotenv", specifier = "==1.1.1" },

@@ -31,7 +31,11 @@ urlpatterns = [
     path("example/hello/", views.example_get_hello, name="hello_get"),
     path("example/echo/", views.example_post_echo, name="echo_post"),
     path("", include("django_drf_keycloak_auth.urls")),
-    path("oauth_test/public/", views.PublicView.as_view(), name="oauth_test_public"),
+    path(
+        "oauth_test/public/",
+        views.AuthTestPublicView.as_view(),
+        name="oauth_test_public",
+    ),
     path(
         "oauth_test/protected/",
         views.AuthTestProtectedView.as_view(),
